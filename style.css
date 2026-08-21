@@ -6,7 +6,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #f8f1f7;
+    background: #f1d9f1f2;
     color: #333;
     min-height: 100vh;
 }
@@ -38,7 +38,7 @@ body {
 }
 
 .chat-container {
-    background: white;
+    background: rgba(255, 255, 255, 0.946);
     border-radius: 20px;
     padding: 25px;
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
@@ -97,7 +97,6 @@ body {
     border-radius: 12px;
     font-size: 16px;
 }
-
 #sendButton {
     padding: 14px 20px;
     border: none;
@@ -134,4 +133,71 @@ footer {
     #sendButton {
         width: 100%;
     }
+}
+.chat-photo {
+    max-width: 220px;
+    max-height: 280px;
+    width: auto;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+}
+
+.user-message:has(.chat-photo) {
+    align-self: flex-end;
+    margin-left: auto;
+    margin-right: 0;
+    width: fit-content;
+}
+
+.typing-indicator {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 8px 0;
+    width: fit-content;
+    display: flex;
+    gap: 4px;
+}
+
+.typing-indicator span {
+    font-size: 20px;
+    animation: bounceDot 1.2s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes bounceDot {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.35;
+    }
+
+    30% {
+        transform: translateY(-5px);
+        opacity: 1;
+    }
+}
+#photoButton {
+    padding: 14px 18px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    background: #e0b2f7;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+#photoButton:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+#photoButton:active {
+    transform: scale(0.97);
 }

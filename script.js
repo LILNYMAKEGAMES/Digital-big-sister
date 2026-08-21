@@ -1,5 +1,10 @@
 const userInput = document.getElementById("userInput");
+console.log("Digital Big Sister scripts loaded");
 const sendButton = document.getElementById("sendButton");
+const photoButton = document.getElementById("photoButton");
+const photoInput = document.getElementById("photoInput");
+ console.log("SCRIPTS.JS LOADED");
+let conversationHistory = [];
 const chatMessages = document.getElementById("chatMessages");
 
 function addMessage(message, sender) {
@@ -18,7 +23,6 @@ function addMessage(message, sender) {
 
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
-
 async function sendMessage() {
     const message = userInput.value.trim();
 
@@ -26,8 +30,15 @@ async function sendMessage() {
         return;
     }
 
+    conversationHistory.push({
+        role: "user",
+        content: message
+    });
+
     addMessage(message, "user");
     userInput.value = "";
+
+    const typingDiv = showTyping();
 
     try {
         const response = await fetch("/chat", {
@@ -36,11 +47,14 @@ async function sendMessage() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                message: message
+                message: message,
+                history: conversationHistory
             })
         });
 
         const data = await response.json();
+
+        typingDiv.remove();
 
         if (data.reply) {
             addMessage(data.reply, "sister");
@@ -50,8 +64,8 @@ async function sendMessage() {
                 "sister"
             );
         }
-
     } catch (error) {
+        typingDiv.remove();
         console.error(error);
 
         addMessage(
@@ -60,12 +74,55 @@ async function sendMessage() {
         );
     }
 }
+function showTyping() {
+    const typingDiv = document.createElement("div");
 
-sendButton.addEventListener("click", sendMessage);
+    typingDiv.classList.add("typing-indicator");
+
+    typingDiv.innerHTML = `
+        <span>•</span>
+        <span>•</span>
+        <span>•</span>
+    `;
+
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    return typingDiv;
+}
+
+
+
+ sendButton.addEventListener("click", sendMessage);
 
 userInput.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         sendMessage();
     }
 });
+
+photoButton.addEventListener("click", () => {
+    photoInput.click();
+});
+photoInput.addEventListener("change", () => {
+    const file = photoInput.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    const photoWrapper = document.createElement("div");
+    photoWrapper.classList.add("user-message");
+
+    const image = document.createElement("img");
+    image.src = URL.createObjectURL(file);
+    image.classList.add("chat-photo");
+
+    photoWrapper.appendChild(image);
+    chatMessages.appendChild(photoWrapper);
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+});
+
+
 
