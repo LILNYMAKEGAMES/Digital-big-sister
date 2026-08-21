@@ -102,8 +102,31 @@ userInput.addEventListener("keydown", function(event) {
 });
 
 photoButton.addEventListener("click", () => {
-    photoInput.click();
+    addMessage("Okayyy girl i see you, what do you need help with?", "sister");
+
+    const outfitChoices = document.createElement("div");
+    outfitChoices.classList.add("outfit-choices");
+
+    outfitChoices.innerHTML = `
+        <button class="outfit-choice" data-prompt="What can I wear with this?">💕 What can I wear with this?</button>
+        <button class="outfit-choice" data-prompt="Help me build an outfit">✨ Help me build an outfit</button>
+        <button class="outfit-choice" data-prompt="Where can I find this?">🛍️ Where can I find this?</button>
+    `;
+
+    chatMessages.appendChild(outfitChoices);
+
+    const choices = outfitChoices.querySelectorAll(".outfit-choice");
+
+    choices.forEach((choice) => {
+    choice.addEventListener("click", () => {
+        userInput.value = choice.dataset.prompt + " ";
+        userInput.focus();
+    });
 });
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+});
+
 photoInput.addEventListener("change", () => {
     const file = photoInput.files[0];
 
@@ -111,7 +134,7 @@ photoInput.addEventListener("change", () => {
         return;
     }
 
-    const photoWrapper = document.createElement("div");
+    const photoWchoicesfrapper = document.createElement("div");
     photoWrapper.classList.add("user-message");
 
     const image = document.createElement("img");

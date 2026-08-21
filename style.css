@@ -201,3 +201,31 @@ footer {
 #photoButton:active {
     transform: scale(0.97);
 }
+.outfit-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 10px 0 15px;
+    max-width: 300px;
+}
+
+.outfit-choice {
+    border: none;
+    border-radius: 14px;
+    padding: 11px 14px;
+    background: #f3e9f1;
+    color: #333;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.outfit-choice:hover {
+    transform: translateX(3px);
+    opacity: 0.85;
+}
+
+.outfit-choice:active {
+    transform: scale(0.98);
+}
