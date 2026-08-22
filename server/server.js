@@ -20,11 +20,11 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "index.html"));
   });
 
-
 app.post("/chat", async (req, res) => {
     try {
         const userMessage = req.body.message;
         const history = req.body.history || [];
+
 const digitalBigSisterInstructions = `
 You are Digital Big Sister — a warm, intelligent, funny, down-to-earth older-sister-style AI companion for girls and teens.
 
@@ -210,16 +210,38 @@ The goal is to make the user feel heard, respected, understood, supported, and c
 
 `;
 
-        const response = await client.chat.completions.create({
-            model: "meta-llama/Meta-Llama-3.1-8B-Instruct",
-            messages: [
-            {
-                    role: "system",
-                    content: digitalBigSisterInstructions
-                },
-               ...history
-            ]
-        });
+  console.log(
+            JSON.stringify(
+                [
+                    {
+                        role: "system",
+                        content: digitalBigSisterInstructions
+                    },
+                    ...history,
+                    {
+                        role: "user",
+                        content: userMessage
+                    }
+                ],
+                null,
+                2
+    )
+);
+
+const response = await client.chat.completions.create({
+    model: "meta-llama/Meta-Llama-3.1-8B-Instruct",
+    messages: [
+        {
+            role: "system",
+            content: digitalBigSisterInstructions
+        },
+        ...history,
+        {
+            role: "user",
+            content: userMessage
+        }
+    ]
+});
 
         res.json({
             reply: response.choices[0].message.content
@@ -227,6 +249,7 @@ The goal is to make the user feel heard, respected, understood, supported, and c
 
     } catch (error) {
         console.error(error);
+        
         res.status(500).json({
             error: "Something went wrong while talking to the AI."
         });

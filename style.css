@@ -229,3 +229,10 @@ footer {
 .outfit-choice:active {
     transform: scale(0.98);
 }
+.outfit-product-image {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+}
