@@ -117,9 +117,16 @@ photoButton.addEventListener("click", () => {
 
     const choices = outfitChoices.querySelectorAll(".outfit-choice");
 
-    choices.forEach((choice) => {
+   choices.forEach((choice) => {
     choice.addEventListener("click", () => {
-        userInput.value = choice.dataset.prompt + " ";
+        const prompt = choice.dataset.prompt;
+
+        if (prompt === "Where can I find this?") {
+            userInput.value = "Where can I find this? ";
+        } else {
+            userInput.value = prompt + " ";
+        }
+
         userInput.focus();
     });
 });

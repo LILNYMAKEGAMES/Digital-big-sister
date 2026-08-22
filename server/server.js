@@ -236,4 +236,59 @@ The goal is to make the user feel heard, respected, understood, supported, and c
 app.listen(PORT, () => {
     console.log(`Digital Big Sister server running on port ${PORT}`);
 });
+    app.post("/outfit-search", async (req, res) => {
+    try {
+        const query = req.body.query;
 
+        if (!query) {
+            return res.status(400).json({
+                error: "Please tell me what clothing item you're looking for."
+            });
+        }
+
+        const searchResponse = await fetch(
+    "https://api.trychannel3.com/v1/search",
+    {
+        method: "POST",
+        headers: {
+            "x-api-key": process.env.CHANNEL3_API_KEY,
+            "content-type": "application/json"
+        },
+        body: JSON.stringify({
+            query: query,
+            filters: {
+                category_ids: ["xoN"]
+            },
+            limit: 10
+        })
+    }
+);
+
+                const data = await searchResponse.json();
+
+        if (!searchResponse.ok) {
+            console.error("CHANNEL3 ERROR:", searchResponse.status, data);
+
+            return res.status(500).json({
+                error: "I couldn't search for that clothing item right now."
+            });
+        }
+
+        res.json({
+            results: data
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: "Something went wrong with the outfit search."
+        });
+    }
+});
+
+
+
+app.listen(PORT, () => {
+    console.log(`Digital Big Sister server running on port ${PORT}`);
+});
