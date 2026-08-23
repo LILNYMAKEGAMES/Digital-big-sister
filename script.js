@@ -18,8 +18,9 @@ function addMessage(message, sender) {
         messageDiv.classList.add("sister-message");
     }
 
-    messageDiv.textContent = message;
-    chatMessages.appendChild(messageDiv);
+   messageDiv.innerHTML = message.replace(/\n/g, "<br>");
+    
+   chatMessages.appendChild(messageDiv);
 
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
@@ -197,6 +198,10 @@ function showOutfitSearchBox() {
             `I got you sis, lookin for ${query} right now`,
             "sister"
         );
+        conversationHistory.push({
+    role: "user",
+    content: `What can I wear with ${query}?`
+});
 
         searchOutfits(query);
     });
@@ -271,16 +276,21 @@ function showWhatToWearBox() {
 
             const data = await response.json();
 
-            typingDiv.remove();
+typingDiv.remove();
 
-            if (data.reply) {
-                addMessage(data.reply, "sister");
-            } else {
-                addMessage(
-                    "Hmm, I couldn't come up with an outfit right now. Try again! 💕",
-                    "sister"
-                );
-            }
+if (data.reply) {
+    addMessage(data.reply, "sister");
+
+    conversationHistory.push({
+        role: "assistant",
+        content: data.reply
+    });
+} else {
+    addMessage(
+        "Hmm, I couldn't come up with an outfit right now. Try again! 💕",
+        "sister"
+    );
+}
 
         } catch (error) {
             typingDiv.remove();
